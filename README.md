@@ -3,7 +3,8 @@
 [Go to wiki pages](https://github.com/codemeistre/docs/wiki)
 
 
-### Diagrams
+### Database Diagrams
 
-- DB [Entity-Relationship Diagram](./database.er-diagram.html)
+- current [Entity-Relationship Diagram](./database.er-diagram.html)
+- specification [Entity-Relationship Diagram](./database_spec.er-diagram.html)
 
