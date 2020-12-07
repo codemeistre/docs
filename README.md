@@ -5,6 +5,5 @@
 
 ### Database Diagrams
 
-- current [Entity-Relationship Diagram](./database.er-diagram.html)
-- specification [Entity-Relationship Diagram](./database_spec.er-diagram.html)
-
+- current [relational model](./database.relational-model.html)
+- specification [relational model](./database_spec.relational-model.html)
