@@ -1,0 +1,7 @@
+{
+  "theme": "forest",
+  "sequence": {
+    "fontFamily": "monospace",
+    "mirrorActors": false
+  }
+}
