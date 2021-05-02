@@ -14,5 +14,5 @@
 
 ### misc
 
-- [repository pattern](./diagram--repository-pattern.png)
-
+- [Repository Pattern](./misc/repository-pattern-overview.png)
+- [Automated Testing](./misc/automated-testing-overview.png)
