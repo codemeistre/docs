@@ -1,0 +1,25 @@
+#! api: v0.0.0
+#! spec: 03-09-2021
+
+sequenceDiagram
+    autonumber
+    participant F as Frontend
+    participant B as Norren
+    participant C as CNode-side
+
+    F ->>+ C: Save current code
+    C ->>- F: ✅ 200 OK
+
+    F ->>+ B: POST /submissions
+
+    B ->> B : Create new submission
+    B ->> B : Fetch test cases
+
+    B ->>+ C: Evaluate submission (data) with given test cases
+    #Note right of B: sync, private and fast (eg: gRPC)
+    C ->>- B: ✅ (evaluation results)
+
+    B ->>+ B: Save submission result
+
+    B ->>- F: ✅ 200 OK
+    Note right of F: body with status:accepted
