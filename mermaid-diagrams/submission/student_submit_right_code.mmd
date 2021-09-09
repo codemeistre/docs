@@ -3,23 +3,43 @@
 
 sequenceDiagram
     autonumber
-    participant F as Frontend
+    participant F as frontend
     participant B as Norren
-    participant C as CNode-side
+    participant Db as database
+    # participant cache as cache
+    participant TP as Token Provider # shared service
+    participant C as CNode
 
-    F ->>+ C: Save current code
-    C ->>- F: ✅ 200 OK
+    F ->>+ C : Save current code
+    C -->>- F : ✅ 200 OK
 
-    F ->>+ B: POST /submissions
+    F ->>+ B : POST /submissions
 
-    B ->> B : Create new submission
-    B ->> B : Fetch test cases
+    B ->>+ Db : Create new submission
+    Db -->>- B : submission 123 created
 
-    B ->>+ C: Evaluate submission (data) with given test cases
-    #Note right of B: sync, private and fast (eg: gRPC)
-    C ->>- B: ✅ (evaluation results)
+    B ->>+ Db : Fetch non-sample test cases
+    Db -->>- B : test cases of 123
 
-    B ->> B: Save submission result
+    rect rgb(255, 0, 0, 0.1)
+    B ->>+ TP : authorize submission
 
-    B ->>- F: ✅ 200 OK
+    TP ->>+ Db: Fetch shared secret
+    Db ->>- TP: JWT secret    
+
+    TP -->>- B : new short-lived JWT token
+    Note right of B: {iss:norren,aud:cnode,sub:submission}
+    end
+
+    B ->>+ C : Evaluate submission (data) with given test cases
+    Note right of B: with Authorization: Bearer <JWT token>
+
+    C ->>+ TP : verify bearer token
+    TP -->>- C : token valid
+
+    C -->>- B : ✅ 200 OK (evaluation results)
+
+    B ->> B : Save submission result
+
+    B -->>- F : ✅ 200 OK
     Note right of F: body with status:accepted
