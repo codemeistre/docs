@@ -19,7 +19,7 @@ sequenceDiagram
     #Note right of B: sync, private and fast (eg: gRPC)
     C ->>- B: ✅ (evaluation results)
 
-    B ->>+ B: Save submission result
+    B ->> B: Save submission result
 
     B ->>- F: ✅ 200 OK
     Note right of F: body with status:accepted
