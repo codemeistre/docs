@@ -5,7 +5,7 @@ Podem ser usados em [Mermaid Live Editor](https://mermaid-js.github.io/mermaid-l
 
 ### Organização
 
-Os arquivos `.mmd` neste diretório devem:
+Os arquivos com sufixo `.mmd` neste diretório, devem:
 
 - modelar um comportamento ou caso de uso da plataforma
 - uma das primeiras linhas deve indicar a versão da especificação (dd-mm-yyyy), ex: `#! spec: 01-02-2021`
@@ -15,6 +15,10 @@ Os arquivos `.mmd` neste diretório devem:
 
 ---
 
-#### auth
+#### Auth
 
 - [login when user is deactivated](./auth/login_when_user_is_deactivated.svg)
+
+#### Work
+
+- [staff create new work](./work/staff_create_work.svg)

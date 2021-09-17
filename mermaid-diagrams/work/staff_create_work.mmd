@@ -1,0 +1,41 @@
+#! api: v0.0.0
+#! spec: 03-09-2021
+
+sequenceDiagram
+    autonumber
+
+    participant C as Client # frontend
+    participant API as API # controller
+    participant VL as Validation # using Joi
+    participant M as O2O Mapper # using @automapper/nestjs
+    participant App as Domain # service
+    participant Db as Database # repository
+
+    C ->>+ API : POST /works
+    activate API
+    Note right of C : body: JSON with CreateWorkDto shape
+
+    API ->>+ VL : parse (validate & transform) the JSON
+    VL -->>- API : payload data parsed
+    Note right of API : CreateWorkDto
+
+    API ->>+ App : create a new work
+
+    App ->>+ M : map DTO to BO
+    M ->>- App : CreateWorkBo
+
+    App ->> App : do stuff with the BO
+    activate App
+    deactivate App
+
+    App ->>+ Db : create new work
+    Db -->>- App : WorkEntity
+
+    App -->>- API : WorkEntity
+    API ->>+ M : transform the BO to DTO
+    M -->>- API : WorkRoDto
+
+    API -->>+ C : 201 OK exposing the 'read-only' DTO
+    Note right of C : body: WorkRoDto
+
+    deactivate API
