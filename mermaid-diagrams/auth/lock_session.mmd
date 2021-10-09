@@ -1,0 +1,19 @@
+#! api: v0.0.0
+#! spec: 03-09-2021
+
+sequenceDiagram
+    autonumber
+
+    participant C as Client
+    participant API as API # controller
+    participant App as Domain # service
+
+    C ->>+ API : PUT /auth/me/lock
+    activate API
+
+    API ->>+ App : lock current session
+    App ->>- API : session locked
+
+    API -->>+ C : 201 OK  with {"isLocked":true}
+    deactivate API
+    Note right of C : body: UserSessionRoDto

@@ -18,6 +18,8 @@ Os arquivos com sufixo `.mmd` neste diretório, devem:
 #### Auth
 
 - [login when user is deactivated](./auth/login_when_user_is_deactivated.svg)
+- [lock current session](./auth/lock_session.svg)
+- [unlock current session](./auth/unlock_session.svg)
 
 #### Work
 

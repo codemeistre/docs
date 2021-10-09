@@ -1,0 +1,26 @@
+#! api: v0.0.0
+#! spec: 03-09-2021
+
+sequenceDiagram
+    autonumber
+
+    participant C as Client
+    participant API as API # controller
+    participant App as Domain # service
+
+    C ->>+ API : DELETE /auth/me/lock
+    activate API
+
+    API ->>+ App : lock current session
+    App ->>- API : session unlocked
+
+    activate API
+    API ->> API: destroy current session
+    deactivate API
+    activate API
+    API ->> API: generate a new session with old session data
+    deactivate API
+
+    API -->>+ C : 201 OK  with {"isLocked":false} and a new cookie
+    deactivate API
+    Note right of C : body: UserSessionRoDto
