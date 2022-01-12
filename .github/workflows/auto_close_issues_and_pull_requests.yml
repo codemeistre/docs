@@ -1,43 +1,14 @@
-name: Close issues or pull request from external users
+##
+## Read:
+## https://github.com/codemeistre/.github/blob/main/.github/workflows/auto_close_issues_and_pull_requests.yml
+##
 
+name: Close issues and pull request from external users
 on:
   issues:
     types: [opened]
   pull_request:
     types: [opened]
-
 jobs:
-  check_issue_author:
-    name: Check issue author association
-    timeout-minutes: 1
-    runs-on: ubuntu-latest
-    if: ${{ github.event.issue }}
-    steps:
-      ## See https://docs.github.com/en/rest/reference/issues
-      - if: ${{ github.event.issue.author_association == 'NONE' && github.event.user.type != 'Bot' }}
-        name: Close Issue
-        uses: peter-evans/close-issue@v1
-        with:
-          comment: |
-            💂 Sorry but we are not accepting issues from non-members :(
-            Auto-closing this issue.
-      - run: |
-          echo "The issue #${{ github.event.issue.number }} created by ${{ github.event.issue.user.login }} was closed"
-
-  check_pr_author:
-    name: Check pull request author association
-    timeout-minutes: 1
-    runs-on: ubuntu-latest
-    if: ${{ github.event.pull_request }}
-    steps:
-      ## See https://docs.github.com/en/rest/reference/pulls
-      - if: ${{ github.event.pull_request.author_association == 'NONE' && github.event.pull_request.user.type != 'Bot' }}
-        name: Close Pull Request
-        uses: peter-evans/close-pull@v1
-        with:
-          delete-branch: false
-          comment: |
-            🙅 We do not accept Pull Requests from non-members!
-            Auto-closing this PR.
-      - run: |
-          echo "The PR #${{ github.event.pull_request.number }} created by ${{ github.event.pull_request.user.login }} was closed"
+  run:
+    uses: codemeistre/.github/.github/workflows/auto_close_issues_and_pull_requests.yml@main
