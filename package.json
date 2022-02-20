@@ -1,0 +1,18 @@
+{
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "mermaid": "node tools/mermaid/bin.js"
+  },
+  "author": "Micael Levi L. C.",
+  "license": "MIT",
+  "dependencies": {
+    "@mermaid-js/mermaid-cli": "^8.14.0",
+    "execa": "^6.1.0",
+    "prompts": "^2.4.2",
+    "snake-case": "^3.0.4"
+  },
+  "devDependencies": {
+    "@types/prompts": "^2.0.14"
+  }
+}
