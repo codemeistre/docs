@@ -1,8 +1,8 @@
 import path from 'node:path'
 import fs from 'node:fs'
 import prompts from 'prompts'
-import { createDirname, createFilename, resolveParentDirname } from './fs-utils.js'
-import { createFullPathToMermaidDiagramsDir, changeFileExtTo } from './utils.js'
+import { createDirname, createFilename, resolveParentDirname, changeFileExtTo } from './fs-utils.js'
+import { createFullPathToMermaidDiagramsDir } from './helpers.js'
 import { MERMAID_FILES_ROOT_DIRECTORY, MERMAID_FILES_EXT } from './constants.js'
 import { snakeCase } from 'snake-case'
 

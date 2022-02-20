@@ -36,3 +36,11 @@ export const stripFileExtension = (filePath) => {
   return !!ext ? filePath.slice(0, - ext.length) : filePath
 }
 
+/**
+ * @param {string} newExt
+ * @param {string} filePath
+ * @returns {string}
+ */
+export const changeFileExtTo = (newExt, filePath) =>
+  `${stripFileExtension(filePath)}${newExt}`
+
