@@ -4,6 +4,9 @@
   "scripts": {
     "mermaid": "node tools/mermaid/bin.js"
   },
+  "engines": {
+    "node": ">=14"
+  },
   "author": "Micael Levi L. C.",
   "license": "MIT",
   "dependencies": {
