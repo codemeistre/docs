@@ -15,7 +15,7 @@ const __dirname = path.dirname(__filename)
 const MERMAID_FILES_EXT = '.mmd'
 const MERMAID_FILES_ROOT_DIRECTORY = 'mermaid-diagrams'
 const MERMAID_CONFIG_FILE_PATH = path.join(__dirname, '..', '..', MERMAID_FILES_ROOT_DIRECTORY, 'mermaid.config.json')
-const BIN_PATH_MERMAID_CLI = path.join(__dirname, 'node_modules', '.bin', 'mmdc')
+const BIN_PATH_MERMAID_CLI = path.join(__dirname, '..', '..', 'node_modules', '.bin', 'mmdc')
 
 
 /**
@@ -174,8 +174,6 @@ const compileDiagram = (mermaidFilePath) => {
   } catch (err) {
     console.error(err.stderr)
     process.exitCode = err.errno || 1
-  } finally {
-    process.exit()
   }
 }
 
