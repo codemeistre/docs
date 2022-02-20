@@ -1,12 +1,13 @@
 import path from 'node:path'
 import fs from 'node:fs'
 import prompts from 'prompts'
-import { createDirname, createFilename, resolveParentDirname, changeFileExtTo } from './fs-utils.js'
-import { createFullPathToMermaidDiagramsDir } from './helpers.js'
+import { createDirname, createFilename, changeFileExtTo } from './fs-utils.js'
+import { createFullPathToMermaidDiagramsDir, isNestedUnderMermaidDiagramsRootDir } from './helpers.js'
 import { MERMAID_FILES_ROOT_DIRECTORY, MERMAID_FILES_EXT } from './constants.js'
 import { snakeCase } from 'snake-case'
 
 const __dirname = createDirname( createFilename() )
+
 
 /**
  * @returns { Promise<{newMermaidFilePath:string, specVersion:Date, shouldCreate:boolean}> }
@@ -19,7 +20,13 @@ export const promptNewDiagram = () =>
       message: `Caminho para que contém o código Mermaidjs a ser compilado (cwd: ${MERMAID_FILES_ROOT_DIRECTORY})`,
       initial: `${MERMAID_FILES_ROOT_DIRECTORY}/`,
       format: (ans) => {
-        ans = snakeCase(ans)
+        if (isNestedUnderMermaidDiagramsRootDir(ans)) ans = snakeCase(ans)
+        else {
+          const dirNamePath = path.dirname(ans)
+          const filename = path.basename(ans)
+          ans = path.join(dirNamePath, snakeCase(filename))
+        }
+
         const fileExt = path.extname(ans)
         return createFullPathToMermaidDiagramsDir(__dirname, fileExt ? ans : `${ans}${MERMAID_FILES_EXT}`)
       },
@@ -57,7 +64,7 @@ export const generateDiagramBoilerplate = (filePath, specDocVersion) => {
     '',
   ].join('\n')
 
-  if ( resolveParentDirname(filePath) !== MERMAID_FILES_ROOT_DIRECTORY )
+  if (!isNestedUnderMermaidDiagramsRootDir(filePath))
     fs.mkdirSync(path.dirname(filePath), { recursive: true })
 
   fs.writeFileSync(filePath, initialCode)
