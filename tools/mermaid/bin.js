@@ -16,6 +16,7 @@ const MERMAID_FILES_EXT = '.mmd'
 const MERMAID_FILES_ROOT_DIRECTORY = 'mermaid-diagrams'
 const MERMAID_CONFIG_FILE_PATH = path.join(__dirname, '..', '..', MERMAID_FILES_ROOT_DIRECTORY, 'mermaid.config.json')
 const BIN_PATH_MERMAID_CLI = path.join(__dirname, '..', '..', 'node_modules', '.bin', 'mmdc')
+const MERMAID_EDITOR_URL = new URL('https://mermaid-js.github.io/mermaid-live-editor')
 
 
 /**
@@ -109,7 +110,7 @@ const generateDiagramBoilerplate = (filePath, specDocVersion) => {
     fs.mkdirSync(path.dirname(filePath), { recursive: true })
 
   fs.writeFileSync(filePath, initialCode)
-  console.info(`Arquivo criado: "${filePath}"`)
+  console.info('Arquivo criado: %s', filePath)
 }
 
 
@@ -164,7 +165,7 @@ const promptCompileDiagram = () =>
 const compileDiagram = (mermaidFilePath) => {
   try {
     const outputFilePath = changeFileExtTo('.svg', mermaidFilePath)
-    console.info(`\n$ mmdc --configFile ${MERMAID_FILES_ROOT_DIRECTORY} --input ${mermaidFilePath} --output ${outputFilePath}`)
+    console.info('\n$ mmdc --configFile %s --input %s --output %s', MERMAID_FILES_ROOT_DIRECTORY, mermaidFilePath, outputFilePath)
     const { stdout } = exec(BIN_PATH_MERMAID_CLI, [
       '--configFile', MERMAID_CONFIG_FILE_PATH,
       '--input', mermaidFilePath,
@@ -199,6 +200,7 @@ switch (action) {
     const { newMermaidFilePath, specVersion, shouldCreate } = await promptNewDiagram()
     if (!newMermaidFilePath || !shouldCreate) process.exit()
     generateDiagramBoilerplate(newMermaidFilePath, specVersion)
+    console.info('Vá para o editor %s', MERMAID_EDITOR_URL)
     break
   }
   case 'compile_diagram': {
