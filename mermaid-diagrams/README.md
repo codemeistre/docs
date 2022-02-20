@@ -12,6 +12,8 @@ Os arquivos com sufixo `.mmd` neste diretório, devem:
 - o nome do arquivo deve estar em `snake_case.mmd`, em inglês, ser bem descritivo, e não depender da ordenação do sistema de arquivos
 - estar localizados num diretório que deve ter o mesmo nome que o módulo (ou 'categoria' da documentação OpenAPI) 
 
+Use o utilitário `./tools/mermaid/bin.js` para seguir as convenções acima, na raiz do projeto: `$ yarn mermaid`
+
 ---
 
 #### Auth
