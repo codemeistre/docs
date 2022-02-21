@@ -9,7 +9,8 @@
 
 ### Application Diagrams
 
-- [mermaid diagrams](./mermaid-diagrams)
+- [MermaidJS diagrams](./mermaid-diagrams)
+- [Draw.io diagrams](./drawio-diagrams)
 
 ### misc
 
