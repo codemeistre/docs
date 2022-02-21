@@ -2,7 +2,8 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "mermaid": "node tools/mermaid/bin.js"
+    "mermaid": "node tools/mermaid/bin.js",
+    "update-db-diagram": "./tools/update-db-diagram.sh"
   },
   "engines": {
     "node": ">=14"
