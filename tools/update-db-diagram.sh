@@ -21,63 +21,82 @@ cd ..
 
 
 ## Where the `.git` lives relative to this script file
-PATH_REPOSITORY_DOCS="../docs" 
+PATH_REPOSITORY_DOCS="../docs"
 
-DATABASE_CURRENT_DIAGRAM_FILENAME="database.relational-model.html"
-DATABASE_SPEC_DIAGRAM_FILENAME="database_spec.relational-model.html"
+## Where the private diagrams lives in
+PATH_PRIVATE_DIAGRAMS="private-diagrams"
+## The name of the SVG file for the database spec. diagram
+## Notice the unique number at the end that ensures other users won't find it
+SPEC_DIAGRAM_FILENAME="database_spec.relational-model__e137076d1747__.svg"
+## The name of the SVG file for the current database schema diagram
+CURRENT_DIAGRAM_FILENAME="database.relational-model__8c16468cc752__.svg"
 
-read -p ">> URL para o SVG/PlantUML editor: " url
+DATABASE_SPEC_DIAGRAM_FILENAMENAME="database_spec.relational-model.html"
+DATABASE_CURRENT_DIAGRAM_FILENAMENAME="database.relational-model.html"
+
+read -p ">> URL para o arquivo SVG ou para a página do editor (do PlantUML): " url
 [ -z "${url//[[:space:]]/}" ] && {
-  echo "The URL is mandatory!"
+  echo "The URL cannot be empty!"
   exit 1
 }
+## NOTE: The following two replaces are assuming that the format of `url` variable
+##       will have a "/uml/" to indicates that it is an URL to the PlantUML editor,
+##       or it will have a "/svg/" to indicates that it is an URL to the SVG file
+diagram_svg_url="${url/"/uml/"/"/svg/"}"
+diagram_editor_url="${url/"/svg/"/"/uml/"}"
 
-echo
-read -p ">> Senha para criptografar o arquivo anterior: " page_passphrase
+echo; read -p ">> Senha para criptografar o arquivo anterior: " page_passphrase
 
-echo
-read -p ">> É o diagrama da especificação? [Yn] " -n 1 is_spec_diagram
-is_spec_diagram=${is_spec_diagram,,}
-is_spec_diagram=${is_spec_diagram:-y}
-[[ "$is_spec_diagram" =~ ^[yn]$ ]] || exit 0 ## Abort
+echo; read -p ">> É o diagrama da especificação? [Yn]: " -n 1 is_spec_diagram
+is_spec_diagram=${is_spec_diagram:-y} ; is_spec_diagram=${is_spec_diagram,,}
+## Abort if neither 'y' nor 'n' (insensitive casse) was supplied
+[[ "$is_spec_diagram" =~ ^[yn]$ ]] || exit 0
 
 if [[ "$is_spec_diagram" = 'y' ]]; then
-  ## The output temporary file that will be encrypted later
-  tmp_diagram_file="./$(date +%s)-${DATABASE_SPEC_DIAGRAM_FILENAME}"
-
   page_title="(spec.) DB Relational Model $(date +'%x %R')"
-
-  full_path_to_diagram_file="$(realpath ${PATH_REPOSITORY_DOCS}/${DATABASE_SPEC_DIAGRAM_FILENAME})"
+  full_path_to_diagram_file="$(realpath ${PATH_REPOSITORY_DOCS}/${PATH_PRIVATE_DIAGRAMS}/${DATABASE_SPEC_DIAGRAM_FILENAMENAME})"
+  diagram_img_path="${SPEC_DIAGRAM_FILENAME}"
 else
-  tmp_diagram_file="./$(date +%s).${DATABASE_CURRENT_DIAGRAM_FILENAME}"
-
   page_title="DB Relational Model $(date +'%x %R')"
-
-  full_path_to_diagram_file="$(realpath ${PATH_REPOSITORY_DOCS}/${DATABASE_CURRENT_DIAGRAM_FILENAME})"
+  full_path_to_diagram_file="$(realpath ${PATH_REPOSITORY_DOCS}/${PATH_PRIVATE_DIAGRAMS}/${DATABASE_CURRENT_DIAGRAM_FILENAMENAME})"
+  diagram_img_path="${CURRENT_DIAGRAM_FILENAME}"
 fi
 
 
-## Download the diagram
-curl "$url" --output "$tmp_diagram_file"
+html_tmp_file="$(date +'%s').swp"
+cat <<EOF > $html_tmp_file
+<!DOCTYPE html>
+<html>
+  <body>
+    <div>
+      <a href="${diagram_editor_url}">EDIT</a>
+    </div>
+    <img src="${diagram_img_path}">
+  </body>
+</html>
+EOF
 
-trap 'delete_svg' ERR
-delete_svg() {
-  rm --force "$tmp_diagram_file"
+## Download the diagram as a HTML temporary file that will be encrypted later
+curl "$diagram_svg_url" --output "$(realpath ${PATH_REPOSITORY_DOCS}/${PATH_PRIVATE_DIAGRAMS}/${diagram_img_path})"
+
+trap 'cleanup' EXIT
+cleanup() {
+  rm --force "$html_tmp_file"
 }
 
-## Refreshs the repository
-cd "$PATH_REPOSITORY_DOCS" && git pull && cd - 
+
+## Refreshs the Git repository
+cd "$PATH_REPOSITORY_DOCS" && git pull && cd -
 
 ## Encrypt the downloaded HTML/SVG file
-npx staticrypt "$tmp_diagram_file" "$page_passphrase"  \
-  --title "$page_title"                                \
+npx staticrypt "$html_tmp_file" "$page_passphrase"  \
+  --embed                                           \
+  --title "$page_title"                             \
   --output "$full_path_to_diagram_file"
 
-delete_svg
 
 ## Update the `@codemeistre/docs` repository
 cd "$PATH_REPOSITORY_DOCS"                   && \
 git add "$full_path_to_diagram_file"         && \
 git commit -m "docs: update $page_title"     && \
 git push origin master
-
