@@ -62,8 +62,15 @@ else
   diagram_img_path="${CURRENT_DIAGRAM_FILENAME}"
 fi
 
+svg_tmp_file="$(date +'%s').svg"
+html_tmp_file="$(date +'%s').html"
+trap 'cleanup' EXIT
+cleanup() {
+  rm --force "$svg_tmp_file" "$html_tmp_file"
+}
 
-html_tmp_file="$(date +'%s').swp"
+curl "$diagram_svg_url" --output "$svg_tmp_file"
+
 cat <<EOF > $html_tmp_file
 <!DOCTYPE html>
 <html>
@@ -71,19 +78,13 @@ cat <<EOF > $html_tmp_file
     <div>
       <a href="${diagram_editor_url}" style="opacity: 20%;">EDIT</a>
     </div>
-    <img src="${diagram_img_path}">
+   $(cat $svg_tmp_file)
   </body>
 </html>
 EOF
 
 ## Download the diagram as a HTML temporary file that will be encrypted later
 curl "$diagram_svg_url" --output "$(realpath ${PATH_REPOSITORY_DOCS}/${PATH_PRIVATE_DIAGRAMS}/${diagram_img_path})"
-
-trap 'cleanup' EXIT
-cleanup() {
-  rm --force "$html_tmp_file"
-}
-
 
 ## Refreshs the Git repository
 cd "$PATH_REPOSITORY_DOCS" && git pull && cd -
