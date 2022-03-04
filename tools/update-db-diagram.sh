@@ -69,7 +69,7 @@ cat <<EOF > $html_tmp_file
 <html>
   <body>
     <div>
-      <a href="${diagram_editor_url}">EDIT</a>
+      <a href="${diagram_editor_url}" style="opacity: 20%;">EDIT</a>
     </div>
     <img src="${diagram_img_path}">
   </body>
