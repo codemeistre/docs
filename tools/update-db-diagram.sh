@@ -25,11 +25,6 @@ PATH_REPOSITORY_DOCS="../docs"
 
 ## Where the private diagrams lives in
 PATH_PRIVATE_DIAGRAMS="private-diagrams"
-## The name of the SVG file for the database spec. diagram
-## Notice the unique number at the end that ensures other users won't find it
-SPEC_DIAGRAM_FILENAME="database_spec.relational-model__e137076d1747__.svg"
-## The name of the SVG file for the current database schema diagram
-CURRENT_DIAGRAM_FILENAME="database.relational-model__8c16468cc752__.svg"
 
 DATABASE_SPEC_DIAGRAM_FILENAMENAME="database_spec.relational-model.html"
 DATABASE_CURRENT_DIAGRAM_FILENAMENAME="database.relational-model.html"
@@ -55,11 +50,9 @@ is_spec_diagram=${is_spec_diagram:-y} ; is_spec_diagram=${is_spec_diagram,,}
 if [[ "$is_spec_diagram" = 'y' ]]; then
   page_title="(spec.) DB Relational Model $(date +'%x %R')"
   full_path_to_diagram_file="$(realpath ${PATH_REPOSITORY_DOCS}/${PATH_PRIVATE_DIAGRAMS}/${DATABASE_SPEC_DIAGRAM_FILENAMENAME})"
-  diagram_img_path="${SPEC_DIAGRAM_FILENAME}"
 else
   page_title="DB Relational Model $(date +'%x %R')"
   full_path_to_diagram_file="$(realpath ${PATH_REPOSITORY_DOCS}/${PATH_PRIVATE_DIAGRAMS}/${DATABASE_CURRENT_DIAGRAM_FILENAMENAME})"
-  diagram_img_path="${CURRENT_DIAGRAM_FILENAME}"
 fi
 
 svg_tmp_file="$(date +'%s').svg"
