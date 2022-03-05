@@ -69,6 +69,7 @@ cleanup() {
   rm --force "$svg_tmp_file" "$html_tmp_file"
 }
 
+## Download the diagram as a SVG temporary file that will be embedded into the HTML
 curl "$diagram_svg_url" --output "$svg_tmp_file"
 
 cat <<EOF > $html_tmp_file
@@ -83,8 +84,6 @@ cat <<EOF > $html_tmp_file
 </html>
 EOF
 
-## Download the diagram as a HTML temporary file that will be encrypted later
-curl "$diagram_svg_url" --output "$(realpath ${PATH_REPOSITORY_DOCS}/${PATH_PRIVATE_DIAGRAMS}/${diagram_img_path})"
 
 ## Refreshs the Git repository
 cd "$PATH_REPOSITORY_DOCS" && git pull && cd -
