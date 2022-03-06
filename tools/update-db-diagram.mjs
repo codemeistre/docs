@@ -34,7 +34,7 @@ const url = await question(
   chalk.bold.bgBlack('→ URL para o arquivo SVG ou para a página do editor (do PlantUML): ')
 ).then(answer => answer.trim())
 if (!url) {
-  console.error('A URL não pode ser vazia!')
+  console.error( chalk.bold.red('A URL não pode ser vazia!') )
   process.exit(1)
 }
 // NOTE: The following two replaces are assuming that the format of `url` variable
@@ -92,8 +92,9 @@ try {
   if (!resp.ok) throw new Error('Something went wrong while downloading the SVG file')
   await pipeline(resp.body, fs.createWriteStream(svg_tmp_file))
 } catch (err) {
-  if (err.errno === 'ENOTFOUND') console.error( chalk.black.bold.bgRed('A URL informada não foi resolvida!') )
-  else console.error(err)
+  if (err.errno === 'ENOTFOUND') console.error( chalk.bold.black('A URL informada não foi resolvida!') )
+  else if (err.code === 'ERR_INVALID_URL') console.error( chalk.bold.red(`A URL está inválida: "${err.input}"`) )
+  else console.error( chalk.bold.red(err.message || err) )
   process.exit()
 }
 console.log(chalk.black.bgGreen('Feito!'))
@@ -117,7 +118,7 @@ fs.writeFileSync(html_tmp_file, `
 `)
 
 // Encrypt the downloaded HTML/SVG file
-console.log(chalk.black.bgYellow('Gerando ...'))
+console.log(chalk.black.bgYellow('Gerando HTML criptografado...'))
 await $`npx staticrypt ${html_tmp_file} ${page_passphrase} --embed --title ${page_title} --output ${full_path_to_diagram_file}`
 console.log(chalk.black.bgGreen('Feito!'))
 
