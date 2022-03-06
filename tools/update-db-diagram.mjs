@@ -75,9 +75,9 @@ const svg_tmp_file = `${Date.now()}.svg`
 const html_tmp_file = `${Date.now()}.html`
 async function cleanup() {
   if (cleanup.done) return;
-  await Promise.all([
-    $`rm --force ${svg_tmp_file}`,
-    $`rm --force ${html_tmp_file}`,
+  await Promise.allSettled([
+    fs.rm(svg_tmp_file, { force: true }),
+    fs.rm(html_tmp_file, { force: true }),
   ])
   cleanup.done = true
 }
