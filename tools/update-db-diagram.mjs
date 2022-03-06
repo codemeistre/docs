@@ -7,7 +7,7 @@
 // #%    Git repository to push that new version. The downloaded file will be
 // #%    encrypted by https://www.npmjs.com/package/staticrypt using a secret.
 // #% NOTE
-// #%    Required programs: cURL, npx, Git
+// #%    Required programs: npx, Git
 // #%    This code uses the https://github.com/google/zx utility.
 // #% AUTHOR
 // #%    Micael Levi L. Cavalcante
@@ -18,6 +18,7 @@ $.shell = '/usr/bin/bash'
 $.verbose = process.env.NODE_ENV === 'development'
 
 import path from 'node:path'
+import { pipeline } from 'node:stream/promises'
 
 /** Path to where the `.git` lives relative to this script file. */
 const PATH_REPOSITORY_DOCS=path.join(__dirname, '..')
@@ -30,7 +31,7 @@ const DATABASE_CURRENT_DIAGRAM_FILENAMENAME='database.relational-model.html'
 
 
 const url = await question(
-  chalk.bold('→ URL para o arquivo SVG ou para a página do editor (do PlantUML): ')
+  chalk.bold.bgBlack('→ URL para o arquivo SVG ou para a página do editor (do PlantUML): ')
 ).then(answer => answer.trim())
 if (!url) {
   console.error('A URL não pode ser vazia!')
@@ -43,11 +44,11 @@ const diagram_svg_url = url.replace('/uml/', '/svg/')
 const diagram_editor_url = url.replace('/svg/', '/uml/')
 
 const page_passphrase = await question(
-  chalk.bold('→ Senha para criptografar o arquivo anterior: ')
+  chalk.bold.bgBlack('→ Senha para criptografar o arquivo anterior: ')
 )
 
 const is_spec_diagram = await question(
-  chalk.bold(`→ É o diagrama da especificação? ${chalk.dim('[Yn]')}: `),
+  chalk.bold.bgBlack(`→ É o diagrama da especificação? ${chalk.dim('[Yn]')}: `),
 )
   .then((answer) => {
     // Abort if neither 'y' nor 'n' (insensitive casse) was supplied
@@ -85,8 +86,16 @@ process.once('beforeExit', cleanup)
 process.once('uncaughtException', cleanup)
 
 // Download the diagram as a SVG temporary file that will be embedded into the HTML
-console.log(chalk.black.bgYellow('Baixando ...'))
-await $`curl --silent ${diagram_svg_url} --output ${svg_tmp_file}`
+console.log(chalk.black.bgYellow('Baixando SVG...'))
+try {
+  const resp = await fetch(diagram_svg_url)
+  if (!resp.ok) throw new Error('Something went wrong while downloading the SVG file')
+  await pipeline(resp.body, fs.createWriteStream(svg_tmp_file))
+} catch (err) {
+  if (err.errno === 'ENOTFOUND') console.error( chalk.black.bold.bgRed('A URL informada não foi resolvida!') )
+  else console.error(err)
+  process.exit()
+}
 console.log(chalk.black.bgGreen('Feito!'))
 
 // Refreshs the Git repository
