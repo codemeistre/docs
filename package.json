@@ -3,7 +3,7 @@
   "type": "module",
   "scripts": {
     "mermaid": "node tools/mermaid/bin.js",
-    "update-db-diagram": "./tools/update-db-diagram.sh"
+    "update-db-diagram": "./tools/update-db-diagram.mjs"
   },
   "engines": {
     "node": ">=14"
