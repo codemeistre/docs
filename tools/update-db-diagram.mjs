@@ -83,6 +83,7 @@ async function cleanup() {
     fs.rm(html_tmp_file, { force: true }),
   ])
   cleanup.done = true
+  process.exit()
 }
 process.once('SIGINT', cleanup)
 process.once('beforeExit', cleanup)
