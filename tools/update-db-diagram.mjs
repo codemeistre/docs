@@ -21,6 +21,8 @@ $.verbose = IS_VERBOSE
 import path from 'node:path'
 import { pipeline } from 'node:stream/promises'
 
+/** */
+const PLANTUML_BASE_URL = 'https://www.plantuml.com/plantuml'
 /** Path to where the `.git` lives relative to this script file. */
 const PATH_REPOSITORY_DOCS=path.join(__dirname, '..')
 const REPOSITORY_REMOTE_NAME = 'origin'
@@ -43,8 +45,9 @@ if (!url) {
 // NOTE: The following two replaces are assuming that the format of `url` variable
 //       will have a "/uml/" to indicates that it is an URL to the PlantUML editor,
 //       or it will have a "/svg/" to indicates that it is an URL to the SVG file.
-const diagram_svg_url = url.replace('/uml/', '/svg/')
-const diagram_editor_url = url.replace('/svg/', '/uml/')
+const diagram_code = url.replace('/svg/', '/uml/').slice(url.indexOf('/uml/') + '/uml/'.length)
+const diagram_svg_url = `${PLANTUML_BASE_URL}/svg/${diagram_code}`
+const diagram_editor_url = `${PLANTUML_BASE_URL}/uml/${diagram_code}`
 
 const page_passphrase = await question(
   chalk.bold.bgBlack('→ Senha para criptografar o arquivo anterior: ')
