@@ -45,7 +45,7 @@ if (!url) {
 // NOTE: The following two replaces are assuming that the format of `url` variable
 //       will have a "/uml/" to indicates that it is an URL to the PlantUML editor,
 //       or it will have a "/svg/" to indicates that it is an URL to the SVG file.
-const diagram_code = url.replace('/svg/', '/uml/').slice(url.indexOf('/uml/') + '/uml/'.length)
+const diagram_code = url.replace('/svg/', '/uml/').replace('/png/', '/uml/').replace('/txt/', '/uml/').slice(url.indexOf('/uml/') + '/uml/'.length)
 const diagram_svg_url = `${PLANTUML_BASE_URL}/svg/${diagram_code}`
 const diagram_editor_url = `${PLANTUML_BASE_URL}/uml/${diagram_code}`
 
