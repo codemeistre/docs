@@ -131,11 +131,11 @@ await $`npx staticrypt ${html_tmp_file} ${page_passphrase} --salt ${CRYPT_SALT} 
 console.log(chalk.black.bgGreen('Feito!'))
 
 const open_generated_page = await question(
-  chalk.bold.bgBlack(`→ Deseja ver como ficou (abrirá com o Firefox)? ${chalk.dim('[Yn]')}: `),
+  chalk.bold.bgBlack(`→ Deseja ver como ficou (abrirá com o Firefox)? ${chalk.dim('[yN]')}: `),
 )
   .then((answer) => {
     // Abort if neither 'y' nor 'n' (insensitive casse) was supplied
-    answer = (answer || 'y').trim().at(0).toLowerCase()
+    answer = (answer || 'n').trim().at(0).toLowerCase()
     if (!['y', 'n'].includes(answer)) process.exit()
     return answer === 'y'
   })
