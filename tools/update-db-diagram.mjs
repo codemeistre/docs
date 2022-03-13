@@ -45,7 +45,8 @@ if (!url) {
 // NOTE: The following two replaces are assuming that the format of `url` variable
 //       will have a "/uml/" to indicates that it is an URL to the PlantUML editor,
 //       or it will have a "/svg/" to indicates that it is an URL to the SVG file.
-const diagram_code = url.replace('/svg/', '/uml/').replace('/png/', '/uml/').replace('/txt/', '/uml/').slice(url.indexOf('/uml/') + '/uml/'.length)
+const normalized_url = url.replace('/svg/', '/uml/').replace('/png/', '/uml/').replace('/txt/', '/uml/')
+const diagram_code = normalized_url.slice(normalized_url.indexOf('/uml/') + '/uml/'.length)
 const diagram_svg_url = `${PLANTUML_BASE_URL}/svg/${diagram_code}`
 const diagram_editor_url = `${PLANTUML_BASE_URL}/uml/${diagram_code}`
 
@@ -129,8 +130,20 @@ console.log(chalk.black.bgYellow('Gerando HTML criptografado...'))
 await $`npx staticrypt ${html_tmp_file} ${page_passphrase} --salt ${CRYPT_SALT} --embed --title ${page_title} --output ${full_path_to_diagram_file}`
 console.log(chalk.black.bgGreen('Feito!'))
 
+const open_generated_page = await question(
+  chalk.bold.bgBlack(`→ Deseja ver como ficou (abrirá com o Firefox)? ${chalk.dim('[Yn]')}: `),
+)
+  .then((answer) => {
+    // Abort if neither 'y' nor 'n' (insensitive casse) was supplied
+    answer = (answer || 'y').trim().at(0).toLowerCase()
+    if (!['y', 'n'].includes(answer)) process.exit()
+    return answer === 'y'
+  })
+if (open_generated_page) await $`firefox ${full_path_to_diagram_file}`
+
 // Commit and pushes the changes to remote
 await cd(PATH_REPOSITORY_DOCS)
 await $`git add ${full_path_to_diagram_file}`
 await $`git commit ${['-m', 'docs: update ' + page_title]}`
 await $`git push ${REPOSITORY_REMOTE_NAME} ${REPOSITORY_TARGET_BRANCH}`
+console.log(chalk.black.bgGreen('Enviado pra deploy!'))
