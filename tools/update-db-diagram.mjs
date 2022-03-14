@@ -114,16 +114,13 @@ $.verbose = true
 await $`git pull`
 $.verbose = IS_VERBOSE
 
-// Encrypt the diagram code so we can embed it in the public HTML markup later
-// for sumchecks purporses.
+// Encrypt the diagram code so we can embeded it iton the public HTML markup
+// later for sumchecks purporses
 const diagram_code_sha1 = crypto
   .createHmac('sha1', page_passphrase).update(diagram_code).digest('hex')
 
 // Create the temporary HTML file that will be encrypted later
 fs.writeFileSync(html_tmp_file, `
-<!--
-${diagram_code_sha1}
--->
 <!DOCTYPE html>
 <html>
   <body>
@@ -139,6 +136,14 @@ ${diagram_code_sha1}
 console.log(chalk.black.bgYellow('Gerando HTML criptografado...'))
 await $`npx staticrypt ${html_tmp_file} ${page_passphrase} --salt ${CRYPT_SALT} --embed --title ${page_title} --output ${full_path_to_diagram_file}`
 console.log(chalk.black.bgGreen('Feito!'))
+const final_html_file_stream = fs.createWriteStream(full_path_to_diagram_file, { flags: 'a' })
+final_html_file_stream.end(`
+<!--sha1:
+${diagram_code_sha1}
+-->
+`.trim())
+final_html_file_stream.close()
+
 
 const open_generated_page = await question(
   chalk.bold.bgBlack(`→ Deseja ver como ficou (abrirá com o Firefox)? ${chalk.dim('[yN]')}: `),
