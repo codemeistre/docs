@@ -19,6 +19,7 @@ $.shell = '/usr/bin/bash'
 $.verbose = IS_VERBOSE
 
 import path from 'node:path'
+import crypto from 'node:crypto'
 import { pipeline } from 'node:stream/promises'
 
 /** */
@@ -113,8 +114,16 @@ $.verbose = true
 await $`git pull`
 $.verbose = IS_VERBOSE
 
+// Encrypt the diagram code so we can embed it in the public HTML markup later
+// for sumchecks purporses.
+const diagram_code_sha1 = crypto
+  .createHmac('sha1', page_passphrase).update(diagram_code).digest('hex')
+
 // Create the temporary HTML file that will be encrypted later
 fs.writeFileSync(html_tmp_file, `
+<!--
+${diagram_code_sha1}
+-->
 <!DOCTYPE html>
 <html>
   <body>
@@ -123,7 +132,8 @@ fs.writeFileSync(html_tmp_file, `
     </div>
    ${ fs.readFileSync(svg_tmp_file, { encoding: 'utf8' }) }
   </body>
-`)
+`.trim())
+
 
 // Encrypt the downloaded HTML/SVG file
 console.log(chalk.black.bgYellow('Gerando HTML criptografado...'))
