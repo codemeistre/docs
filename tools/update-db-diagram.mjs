@@ -7,7 +7,7 @@
 // #%    Git repository to push that new version. The downloaded file will be
 // #%    encrypted by https://www.npmjs.com/package/staticrypt using a secret.
 // #% NOTE
-// #%    Required programs: npx, Git
+// #%    Required programs: npx, git(1), tail(1), head(1)
 // #%    This code uses the https://github.com/google/zx utility.
 // #% AUTHOR
 // #%    Micael Levi L. Cavalcante
@@ -81,18 +81,18 @@ if (is_spec_diagram) {
 
 const svg_tmp_file = `${Date.now()}.svg`
 const html_tmp_file = `${Date.now()}.html`
-async function cleanup() {
-  if (cleanup.done) return;
+async function cleanupAndExit() {
+  if (cleanupAndExit.done) return; 
   await Promise.allSettled([
     fs.rm(svg_tmp_file, { force: true }),
     fs.rm(html_tmp_file, { force: true }),
   ])
-  cleanup.done = true
+  cleanupAndExit.done = true // memoize
   process.exit()
 }
-process.once('SIGINT', cleanup)
-process.once('beforeExit', cleanup)
-process.once('uncaughtException', cleanup)
+process.once('SIGINT', cleanupAndExit)
+process.once('beforeExit', cleanupAndExit)
+process.once('uncaughtException', cleanupAndExit)
 
 // Download the diagram as a SVG temporary file that will be embedded into the HTML
 console.log(chalk.black.bgYellow('Baixando SVG...'))
@@ -118,6 +118,16 @@ $.verbose = IS_VERBOSE
 // later for sumchecks purporses
 const diagram_code_sha1 = crypto
   .createHmac('sha1', page_passphrase).update(diagram_code).digest('hex')
+
+const curr_diagram_code_sha1 = fs.pathExistsSync(full_path_to_diagram_file)
+  ? (await $`tail -n2 ${full_path_to_diagram_file} | head -n1`).stdout.trim()
+  : undefined
+
+if (curr_diagram_code_sha1 === diagram_code_sha1) {
+  console.log(chalk.black.bgGreen('A versão que você está enviado já está no repositório, considerando a senha utilizada'))
+  process.exitCode = 0
+  await cleanupAndExit()
+}
 
 // Create the temporary HTML file that will be encrypted later
 fs.writeFileSync(html_tmp_file, `
