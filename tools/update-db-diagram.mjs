@@ -135,7 +135,7 @@ fs.writeFileSync(html_tmp_file, `
 <html>
   <body>
     <div>
-      <a href="${diagram_editor_url}" style="opacity: 20%;">EDIT</a>
+      <a href="${diagram_editor_url}" style="opacity: 20%;">EDIT (${currTime})</a>
     </div>
    ${ fs.readFileSync(svg_tmp_file, { encoding: 'utf8' }) }
   </body>
