@@ -1,4 +1,4 @@
-#!/usr/bin/env -S npx zx
+#!/usr/bin/env -S npx zx@6 --experimental
 // ##
 // #% SYNOPSIS
 // #%    update-db-diagram.mjs
@@ -79,10 +79,14 @@ if (is_spec_diagram) {
   full_path_to_diagram_file = path.join(PATH_PRIVATE_DIAGRAMS, DATABASE_CURRENT_DIAGRAM_FILENAMENAME)
 }
 
+let stopLastSpinner = null
 const svg_tmp_file = `${Date.now()}.svg`
 const html_tmp_file = `${Date.now()}.html`
 async function cleanupAndExit() {
   if (cleanupAndExit.done) return; 
+  
+  if (stopLastSpinner) stopLastSpinner()
+
   await Promise.allSettled([
     fs.rm(svg_tmp_file, { force: true }),
     fs.rm(html_tmp_file, { force: true }),
@@ -96,6 +100,7 @@ process.once('uncaughtException', cleanupAndExit)
 
 // Download the diagram as a SVG temporary file that will be embedded into the HTML
 console.log(chalk.black.bgYellow('Baixando SVG...'))
+stopLastSpinner = startSpinner()
 try {
   const resp = await fetch(diagram_svg_url)
   if (!resp.ok) throw new Error('Something went wrong while downloading the SVG file')
@@ -144,6 +149,7 @@ fs.writeFileSync(html_tmp_file, `
 
 // Encrypt the downloaded HTML/SVG file
 console.log(chalk.black.bgYellow('Gerando HTML criptografado...'))
+stopLastSpinner = startSpinner()
 await $`npx staticrypt ${html_tmp_file} ${page_passphrase} --salt ${CRYPT_SALT} --embed --title ${page_title} --output ${full_path_to_diagram_file}`
 console.log(chalk.black.bgGreen('Feito!'))
 const final_html_file_stream = fs.createWriteStream(full_path_to_diagram_file, { flags: 'a' })
