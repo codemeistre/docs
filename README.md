@@ -9,8 +9,21 @@
 
 ### Application Diagrams
 
-- [MermaidJS diagrams](./mermaid-diagrams)
-- [Draw.io diagrams](./drawio-diagrams)
+#### Auth
+
+- [login when user is deactivated](./mermaid-diagrams/auth/login_when_user_is_deactivated.svg)
+- [lock current session](./mermaid-diagrams/auth/lock_session.svg)
+- [unlock current session](./mermaid-diagrams/auth/unlock_session.svg)
+
+#### Work
+
+- [staff create new work](./mermaid-diagrams/work/staff_create_work.svg)
+
+#### User
+
+- [upload new avatar](./drawio-diagrams/user/upload_new_avatar.svg)
+- [password recovery](./mermaid-diagrams/user/password_recovery.svg)
+
 
 ### misc
 
