@@ -10,15 +10,15 @@ sequenceDiagram
     participant App as Domain # service
     participant Db as Database # repository
 
-    C ->>+ API : POST /works
+    C ->>+ API : POST /assignments
     activate API
-    Note right of C : body: CreateWorkDto shape
+    Note right of C : body: CreateAssignmentDto shape
 
     API ->>+ VL : parse (validate & transform) the JSON
     VL -->>- API : payload data parsed
-    Note right of API : CreateWorkDto
+    Note right of API : CreateAssignmentDto
 
-    API ->>+ App : create a new work
+    API ->>+ App : create a new assignment
 
     App ->> App : do business logic stuff with DTO object
     activate App
@@ -26,16 +26,16 @@ sequenceDiagram
 
     App ->>+ M : map the DTO to DAO
     M ->>- App : data access object
-    Note right of M: WorkDao
+    Note right of M: AssignmentDao
 
-    App ->>+ Db : create a new work
-    Db -->>- App : WorkEntity
+    App ->>+ Db : create a new assignment
+    Db -->>- App : AssignmentEntity
 
-    App -->>- API : WorkEntity
+    App -->>- API : AssignmentEntity
     API ->>+ M : map the BO to DTO
-    M -->>- API : WorkRoDto
+    M -->>- API : AssignmentRoDto
 
     API -->>+ C : 201 OK
-    Note right of C : body: WorkRoDto
+    Note right of C : body: AssignmentRoDto
 
     deactivate API

@@ -8,6 +8,7 @@
 
 - [password recovery](./user/password_recovery.svg)
 
-#### Work
+#### Assignment
 
-- [staff create new work](./work/staff_create_work.svg)
+- [staff create new assignment](./assignment/staff_create_assignment.svg)
+- [student's access to assignment](./assignment/student_access_to_assignment.svg)
