@@ -18,7 +18,7 @@
 #### Assignment
 
 - [staff create new assignment](./mermaid-diagrams/assignment/staff_create_assignment.svg)
-- [student's access to assignment](./assignment/student_access_to_assignment.svg)
+- [student's access to assignment](./mermaid-diagrams/assignment/student_access_to_assignment.svg)
 
 #### User
 
