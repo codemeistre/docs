@@ -15,9 +15,10 @@
 - [lock current session](./mermaid-diagrams/auth/lock_session.svg)
 - [unlock current session](./mermaid-diagrams/auth/unlock_session.svg)
 
-#### Work
+#### Assignment
 
-- [staff create new work](./mermaid-diagrams/work/staff_create_work.svg)
+- [staff create new assignment](./mermaid-diagrams/assignment/staff_create_assignment.svg)
+- [student's access to assignment](./assignment/student_access_to_assignment.svg)
 
 #### User
 

@@ -1,0 +1,33 @@
+%%! spec: 29/09/2022
+
+sequenceDiagram
+actor Student
+
+Student ->> AssignmentController: GET /classes/{class_id}/assignments/{assignment_id}
+Note over Student, AssignmentController: tries to acess a given assignment (deals with exercise raffle)
+
+AssignmentController ->> AssignmentService: check if student can access
+
+AssignmentService ->> AssignmentRepository: fetch the given assignment
+Note over AssignmentService, AssignmentRepository: also fetch its entries in AssignmentUsers
+
+AssignmentRepository -->> AssignmentService: return the assignment data
+
+AssignmentService ->> AssignmentService: validate access in AssignmentUsers
+Note over AssignmentService: check if the table has a tuple for the student
+
+alt can access
+    AssignmentService ->> AssignmentService: validate access in accessableToStudentsIds
+    Note over AssignmentService: check if the column has an entry for the student
+
+    alt can access
+        AssignmentService -->> AssignmentController: return the assignment data
+        AssignmentController -->> Student: return the assignment data
+    else cannot access
+        AssignmentService -->> AssignmentController: throw ForbiddenException
+        AssignmentController -->> Student: you are not allowed to access the assignment
+    end
+else cannot access
+    AssignmentService -->> AssignmentController: throw NotFoundException
+    AssignmentController -->> Student: cannot find assignment
+end
