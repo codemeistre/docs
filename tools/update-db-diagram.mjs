@@ -55,29 +55,15 @@ const page_passphrase = await question(
   chalk.bold.bgBlack('→ Senha para criptografar o arquivo anterior: ')
 )
 
-const is_spec_diagram = await question(
-  chalk.bold.bgBlack(`→ É o diagrama da especificação? ${chalk.dim('[Yn]')}: `),
-)
-  .then((answer) => {
-    // Abort if neither 'y' nor 'n' (insensitive casse) was supplied
-    answer = (answer || 'y').trim().at(0).toLowerCase()
-    if (!['y', 'n'].includes(answer)) process.exit()
-    return answer === 'y'
-  })
-
 let page_title, full_path_to_diagram_file;
 const currTime = new Intl.DateTimeFormat('pt-BR', {
   hour12:false, timeZone:'America/Manaus',
   year:'numeric', month:'numeric', day:'numeric',
   hour:'numeric', minute:'numeric'
 }).format(new Date())
-if (is_spec_diagram) {
-  page_title = `(spec.) DB Relational Model ${currTime}`
-  full_path_to_diagram_file = path.join(PATH_PRIVATE_DIAGRAMS, DATABASE_SPEC_DIAGRAM_FILENAMENAME)
-} else {
-  page_title = `DB Relational Model ${currTime}`
-  full_path_to_diagram_file = path.join(PATH_PRIVATE_DIAGRAMS, DATABASE_CURRENT_DIAGRAM_FILENAMENAME)
-}
+
+page_title = `(spec.) DB Relational Model ${currTime}`
+full_path_to_diagram_file = path.join(PATH_PRIVATE_DIAGRAMS, DATABASE_SPEC_DIAGRAM_FILENAMENAME)
 
 const svg_tmp_file = `${Date.now()}.svg`
 const html_tmp_file = `${Date.now()}.html`

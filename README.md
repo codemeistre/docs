@@ -2,9 +2,8 @@
 
 > [Go to wiki pages](https://github.com/codemeistre/docs/wiki)
 
-### Database Diagrams
+### Database Diagram
 
-- current [relational model](./private-diagrams/database.relational-model.html)
 - specification [relational model](./private-diagrams/database_spec.relational-model.html)
 
 ### Application Diagrams
