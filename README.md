@@ -16,6 +16,7 @@
 
 #### Assignment
 
+- [assignment grade workflow](./drawio-diagrams/assignment/assignment_grade_workflow.svg)
 - [staff create new assignment](./mermaid-diagrams/assignment/staff_create_assignment.svg)
 - [student's access to assignment](./mermaid-diagrams/assignment/student_access_to_assignment.svg)
 
