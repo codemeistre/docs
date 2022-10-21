@@ -8,17 +8,21 @@
 
 ### Application Diagrams
 
+#### Assignment
+
+- [assignment grade workflow](./drawio-diagrams/assignment/assignment_grade_workflow.svg)
+- [staff create new assignment](./mermaid-diagrams/assignment/staff_create_assignment.svg)
+- [student's access to assignment](./mermaid-diagrams/assignment/student_access_to_assignment.svg)
+
 #### Auth
 
 - [login when user is deactivated](./mermaid-diagrams/auth/login_when_user_is_deactivated.svg)
 - [lock current session](./mermaid-diagrams/auth/lock_session.svg)
 - [unlock current session](./mermaid-diagrams/auth/unlock_session.svg)
 
-#### Assignment
+### Programming Exercise
 
-- [assignment grade workflow](./drawio-diagrams/assignment/assignment_grade_workflow.svg)
-- [staff create new assignment](./mermaid-diagrams/assignment/staff_create_assignment.svg)
-- [student's access to assignment](./mermaid-diagrams/assignment/student_access_to_assignment.svg)
+- [programming exercise states in assignment](./mermaid-diagrams/programming-exercise/programming_exercise_states_in_assignment.svg)
 
 #### User
 
