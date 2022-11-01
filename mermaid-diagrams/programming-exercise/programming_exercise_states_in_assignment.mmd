@@ -1,18 +1,22 @@
-%%! spec: 21/10/2022
+%%! spec: 01/11/2022
 
 stateDiagram-v2
     direction LR
 
     state submission_made <<choice>>
 
-    exercise_unsolved: Unsolved
+    exercise_not_started: Not started
+    exercise_started: Started
     exercise_correct: Correct
     exercise_partially_correct: Partially correct
     exercise_incorrect: Incorrect
     exercise_reviewed: Reviewed
 
-    [*] --> exercise_unsolved: exercise is added in the assignment
-    exercise_unsolved --> submission_made: student made a submission
+    [*] --> exercise_not_started: exercise is added in the assignment
+    exercise_not_started --> exercise_started: student wrote some code
+
+    exercise_started --> exercise_started: student wrote some code
+    exercise_started --> submission_made: student made a submission
 
     submission_made --> exercise_incorrect: correctness = 0
     exercise_incorrect --> submission_made: student made a submission
