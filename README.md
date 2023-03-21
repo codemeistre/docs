@@ -21,6 +21,10 @@
 - [lock current session](./mermaid-diagrams/auth/lock_session.svg)
 - [unlock current session](./mermaid-diagrams/auth/unlock_session.svg)
 
+### CNode Pool
+
+- [cnode pools arrrangement](./drawio-diagrams/cnode-pool/cnode-pools-arrangement.svg)
+
 #### Programming exercise
 
 - [programming exercise states in assignment](./mermaid-diagrams/programming-exercise/programming_exercise_states_in_assignment.svg)
