@@ -9,7 +9,7 @@
 - [lock current session](./auth/lock_session.svg)
 - [unlock current session](./auth/unlock_session.svg)
 
-### ProgrammingExercise
+#### ProgrammingExercise
 
 - [programming exercise states in assignment](./programming-exercise/programming_exercise_states_in_assignment.svg)
 

@@ -21,7 +21,7 @@
 - [lock current session](./mermaid-diagrams/auth/lock_session.svg)
 - [unlock current session](./mermaid-diagrams/auth/unlock_session.svg)
 
-### CNode Pool
+#### CNode Pool
 
 - [cnode pools arrrangement](./drawio-diagrams/cnode-pool/cnode-pools-arrangement.svg)
 
@@ -33,7 +33,6 @@
 
 - [upload new avatar](./drawio-diagrams/user/upload_new_avatar.svg)
 - [password recovery](./mermaid-diagrams/user/password_recovery.svg)
-
 
 ### misc
 
