@@ -21,6 +21,12 @@
 - [lock current session](./mermaid-diagrams/auth/lock_session.svg)
 - [unlock current session](./mermaid-diagrams/auth/unlock_session.svg)
 
+#### CNode
+
+- [choose cnode for user](./drawio-diagrams/cnode/choose-cnode-for-user.svg)
+- [redis data arrangement](./drawio-diagrams/cnode/redis-data-arrangement.svg)
+- [when session TTL expires](./drawio-diagrams/cnode/when-session-TTL-expires.svg)
+
 #### CNode Pool
 
 - [cnode pools arrrangement](./drawio-diagrams/cnode-pool/cnode-pools-arrangement.svg)
