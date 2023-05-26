@@ -130,7 +130,7 @@ fs.writeFileSync(html_tmp_file, `
 
 // Encrypt the downloaded HTML/SVG file
 console.log(chalk.black.bgYellow('Gerando HTML criptografado...'))
-await $`npx staticrypt ${html_tmp_file} ${page_passphrase} --salt ${CRYPT_SALT} --embed --title ${page_title} --output ${full_path_to_diagram_file}`
+await $`STATICRYPT_PASSWORD=${page_passphrase} npx --yes staticrypt ${html_tmp_file} --salt ${CRYPT_SALT} --embed --title ${page_title} --output ${full_path_to_diagram_file}`
 console.log(chalk.black.bgGreen('Feito!'))
 const final_html_file_stream = fs.createWriteStream(full_path_to_diagram_file, { flags: 'a' })
 final_html_file_stream.end(`
