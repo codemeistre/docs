@@ -130,7 +130,8 @@ fs.writeFileSync(html_tmp_file, `
 
 // Encrypt the downloaded HTML/SVG file
 console.log(chalk.black.bgYellow('Gerando HTML criptografado...'))
-await $`STATICRYPT_PASSWORD=${page_passphrase} npx --yes staticrypt ${html_tmp_file} --salt ${CRYPT_SALT} --embed --title ${page_title} --output ${full_path_to_diagram_file}`
+await $`STATICRYPT_PASSWORD=${page_passphrase} npx --yes staticrypt ${html_tmp_file} --salt ${CRYPT_SALT} --embed --title ${page_title}}`
+await $`mv ${html_tmp_file} ${full_path_to_diagram_file}`
 console.log(chalk.black.bgGreen('Feito!'))
 const final_html_file_stream = fs.createWriteStream(full_path_to_diagram_file, { flags: 'a' })
 final_html_file_stream.end(`
@@ -152,7 +153,6 @@ const open_generated_page = await question(
   })
 if (open_generated_page) await $`firefox ${full_path_to_diagram_file}`
 
-// Commit and pushes the changes to remote
 await cd(PATH_REPOSITORY_DOCS)
 await $`git add ${full_path_to_diagram_file}`
 await $`git commit ${['-m', 'docs: update ' + page_title]}`
